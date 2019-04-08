@@ -1,0 +1,44 @@
+.ladiv{
+	width: 306px;
+	height: 306px;
+}
+.smdiv{
+	width: 100px;
+	height: 100px;
+	border:1px solid black;
+	float: left;
+	cursor: url(./cur/big.cur),auto;
+}
+.ladivC{
+	width: 306px;
+	height: 306px;
+}
+.toolC{
+	height: 270px;
+	width: 16px;
+	float: left;
+	text-align: center;
+	line-height: 260px;
+	cursor: pointer;
+}
+.midivC{
+	width: 270px;
+	height: 270px;
+	border:1px solid black;
+	cursor: url(./cur/small.cur),auto;
+	float: left;
+}
+.smdivC{
+	width: 32px;
+	height: 32px;
+	border:1px solid black;
+	float: left;
+	cursor: pointer;
+}
+.toolC{
+	height: 260px;
+}
+
+.selectDiv{
+	color: red;
+}
