@@ -1,0 +1,150 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<title></title>
+	<script type="text/javascript" src="./jquery-3.3.1.min.js"></script>
+	<link href="http://libs.baidu.com/bootstrap/3.0.3/css/bootstrap.min.css" rel="stylesheet">
+	<style type="text/css">
+
+		#pic{
+			width: 306px;
+			height: 306px;
+		}
+
+		.inputfile {
+		    width: 0.1px; 
+		    height: 0.1px; 
+		    opacity: 0; 
+		    overflow: hidden; 
+		    position: absolute; 
+		    z-index: -1;
+		}
+		.inputfile + label {
+		    font-size: 1.0em;
+		    font-weight: 700;
+		    color: #a9a9a9;
+		    display: inline-block;
+		    cursor: pointer;
+		    width: 100px;
+			height: 100px;
+			text-align: center;
+			line-height: 100px;
+		}
+		.inputfile + label:hover {
+			color: gray;
+		}
+		.prePic{
+			float: left;
+			position: relative;
+			display: inline-block;
+			width: 100px;
+			height: 100px;
+		}
+		.prePic a:hover,a:focus{
+			color: #fff;
+			text-decoration: none;
+		}
+		.prePic img{
+			padding: 2px;
+			width: 100px;
+			height: 100px;
+		}
+		.deleteBtn{
+			position: absolute;
+			padding-top: 4px;
+			text-align: center;
+			left: 0;
+			bottom: 0;
+			width: 100%;
+			background: rgba(0,0,0,0.6);
+			height: 30px;
+			color: #fff;
+			cursor: pointer;
+			display: none;
+		}
+	</style>
+</head>
+<body>
+	<div id="pic">
+		<div id="imgPreList"></div>
+		<input type="file" name="file" id="upload" class="inputfile" />
+		<label for="upload">Choose a file</label>
+	</div>
+	<script type="text/javascript">
+		var imgFiles = [];
+		var imgSrc = [];
+		var imgName = [];
+
+		//鼠标经过显示删除按钮
+		$('#imgPreList').on('mouseover', '.prePic', function(){
+			$(this).children('a').show();
+		});
+		//鼠标离开不显示删除按钮
+		$('#imgPreList').on('mouseleave', '.prePic', function(){
+			$(this).children('a').hide();
+		});
+
+		//删除图片
+		$('#imgPreList').on('click', '.prePic a', function(){
+			removeImg($('#imgPreList'), $(this).attr('index'));
+			if (imgSrc.length<9) {
+				$('#pic >label').show();
+			}
+		});
+
+		$('#upload').on('change', function(){
+			if (imgSrc.length==8) {
+				$('#pic >label').hide();
+			} else if(imgSrc.length >9){
+				return false;
+			}
+			if (this.files[0].size>1024*1024*5){
+				alert('Picture cannot exceed 5Mb.');
+				return false;
+			}
+			var imgList = this.files;
+			for(var i = 0; i < imgList.length; i++){
+				imgSrc.push(getObjectURL(imgList[i]));
+				imgName.push(imgList[i].name);
+				imgFiles.push(imgList[i]);
+			}
+			createImgPrev($('#imgPreList'));
+			this.value = null;
+
+		})
+		$('.prePic a').on('click', function(){
+			alert($(this).attr('index'));
+		});
+
+		//获取上传图片的url
+		function getObjectURL(file){
+			var url = null;
+			if (window.createObjectURL!=undefined) {
+				//basic
+				url = window.createObjectURL(file);
+			}else if (window.URL!=undefined){
+				//mozilla(firefox)
+				url = window.URL.createObjectURL(file);
+			}else if (window.webkitURL!=undefined){
+				//webkit or chrome
+				url = window.webkitURL.createObjectURL(file);
+			}
+			return url;
+		}
+		//创建图片预览标签
+		function createImgPrev(area){
+			area.html("");
+			for(var j=0; j<imgSrc.length; j++){
+				area.append('<div class="prePic"><img src='+imgSrc[j]+'><a index='+j+' class="deleteBtn">delete</a></div>');
+			}
+		}
+		//删除上传图片
+		function removeImg(area, index){
+			imgSrc.splice(index, 1);
+			imgFiles.splice(index, 1);
+			imgName.splice(index, 1);
+			createImgPrev(area);
+		}
+	</script>
+</body>
+</html>
